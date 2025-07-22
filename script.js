@@ -60,16 +60,63 @@ document.addEventListener('DOMContentLoaded', function() {
     const emailBtn = document.querySelector('a[href^="mailto:"]');
     
     if (phoneBtn) {
-        phoneBtn.addEventListener('click', function() {
-            // Optional: Add analytics tracking for phone clicks
+        phoneBtn.addEventListener('click', function(e) {
             console.log('Phone button clicked');
+            // Add visual feedback
+            this.style.transform = 'scale(0.95)';
+            setTimeout(() => {
+                this.style.transform = 'scale(1)';
+            }, 150);
         });
     }
     
     if (emailBtn) {
-        emailBtn.addEventListener('click', function() {
-            // Optional: Add analytics tracking for email clicks
+        emailBtn.addEventListener('click', function(e) {
             console.log('Email button clicked');
+            
+            // Add visual feedback
+            this.style.transform = 'scale(0.95)';
+            setTimeout(() => {
+                this.style.transform = 'scale(1)';
+            }, 150);
+            
+            // Fallback for email clients that might not work
+            setTimeout(() => {
+                const email = 'mpdoor1@gmail.com';
+                const subject = 'Piano Tuning Service Inquiry';
+                const body = 'Hello,\n\nI would like to schedule a piano tuning appointment.\n\nMy piano details:\n- Piano type: \n- Location: \n- Preferred date/time: \n\nThank you!';
+                
+                // Show a helpful message if the email client doesn't open
+                const notification = document.createElement('div');
+                notification.style.cssText = `
+                    position: fixed;
+                    top: 20px;
+                    right: 20px;
+                    background: #DC143C;
+                    color: white;
+                    padding: 15px;
+                    border-radius: 5px;
+                    z-index: 10000;
+                    max-width: 350px;
+                    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+                `;
+                notification.innerHTML = `
+                    <strong>Email Client Not Opening?</strong><br>
+                    Please email me directly at: <strong>${email}</strong><br>
+                    <small>Subject: ${subject}</small>
+                    <button onclick="this.parentElement.remove()" style="float: right; background: none; border: none; color: white; font-size: 16px; cursor: pointer;">×</button>
+                `;
+                
+                document.body.appendChild(notification);
+                
+                // Auto remove after 8 seconds
+                setTimeout(() => {
+                    if (notification.parentElement) {
+                        notification.remove();
+                    }
+                }, 8000);
+                
+            }, 2000); // Wait 2 seconds to see if email client opens
         });
     }
 });
