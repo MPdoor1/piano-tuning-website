@@ -212,18 +212,25 @@ const statsObserver = new IntersectionObserver((entries) => {
                 let currentValue = 0;
                 const targetValue = values[index];
                 const suffix = suffixes[index];
-                const increment = targetValue / 100; // Animate over 100 steps
+                const increment = targetValue / 50; // Animate over 50 steps for smoother animation
                 
                 const timer = setInterval(() => {
                     currentValue += increment;
                     if (currentValue >= targetValue) {
-                        currentValue = targetValue;
-                        stat.textContent = Math.floor(currentValue) + suffix;
+                        // Ensure final value shows correct suffix
+                        stat.textContent = targetValue + suffix;
                         clearInterval(timer);
                     } else {
-                        stat.textContent = Math.floor(currentValue) + (index === 2 ? '%' : (index > 0 ? '+' : ''));
+                        // During animation, only show suffix for percentage
+                        if (index === 2) { // Satisfaction rate
+                            stat.textContent = Math.floor(currentValue) + '%';
+                        } else if (index === 1) { // Years experience
+                            stat.textContent = Math.floor(currentValue) + '+';
+                        } else { // Pianos tuned
+                            stat.textContent = Math.floor(currentValue);
+                        }
                     }
-                }, 20);
+                }, 30);
             });
             
             statsObserver.unobserve(entry.target);
@@ -239,4 +246,14 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Initialize button ripple effects
     addButtonRippleEffect();
+    
+    // Fallback to ensure stats show correctly if animation doesn't work
+    setTimeout(() => {
+        const statNumbers = document.querySelectorAll('.stat-number');
+        if (statNumbers.length >= 3) {
+            statNumbers[0].textContent = '500+';  // Pianos tuned
+            statNumbers[1].textContent = '10+';   // Years experience  
+            statNumbers[2].textContent = '100%';  // Satisfaction rate
+        }
+    }, 5000); // After 5 seconds, ensure correct values are shown
 }); 
