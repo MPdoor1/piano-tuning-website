@@ -204,33 +204,37 @@ const statsObserver = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
         if (entry.isIntersecting) {
             const statNumbers = entry.target.querySelectorAll('.stat-number');
-            const values = [500, 10, 100];
-            const suffixes = ['+', '+', '%'];
             
+            // Handle each stat differently
             statNumbers.forEach((stat, index) => {
-                // Set initial value for animation
-                let currentValue = 0;
-                const targetValue = values[index];
-                const suffix = suffixes[index];
-                const increment = targetValue / 50; // Animate over 50 steps for smoother animation
-                
-                const timer = setInterval(() => {
-                    currentValue += increment;
-                    if (currentValue >= targetValue) {
-                        // Ensure final value shows correct suffix
-                        stat.textContent = targetValue + suffix;
-                        clearInterval(timer);
-                    } else {
-                        // During animation, only show suffix for percentage
-                        if (index === 2) { // Satisfaction rate
-                            stat.textContent = Math.floor(currentValue) + '%';
-                        } else if (index === 1) { // Years experience
-                            stat.textContent = Math.floor(currentValue) + '+';
-                        } else { // Pianos tuned
-                            stat.textContent = Math.floor(currentValue);
+                if (index === 0) {
+                    // Pianos tuned - animate from 0 to 500+
+                    let currentValue = 0;
+                    const timer = setInterval(() => {
+                        currentValue += 25;
+                        if (currentValue >= 500) {
+                            stat.textContent = '500+';
+                            clearInterval(timer);
+                        } else {
+                            stat.textContent = currentValue.toString();
                         }
-                    }
-                }, 30);
+                    }, 50);
+                } else if (index === 1) {
+                    // Years experience - animate from 0 to 10+
+                    let currentValue = 0;
+                    const timer = setInterval(() => {
+                        currentValue += 1;
+                        if (currentValue >= 10) {
+                            stat.textContent = '10+';
+                            clearInterval(timer);
+                        } else {
+                            stat.textContent = currentValue.toString();
+                        }
+                    }, 100);
+                } else if (index === 2) {
+                    // Satisfaction rate - set directly to 100% (no animation to avoid issues)
+                    stat.textContent = '100%';
+                }
             });
             
             statsObserver.unobserve(entry.target);
@@ -247,7 +251,14 @@ document.addEventListener('DOMContentLoaded', function() {
     // Initialize button ripple effects
     addButtonRippleEffect();
     
-    // Fallback to ensure stats show correctly if animation doesn't work
+    // Immediate fallback to ensure satisfaction rate shows correctly
+    const statNumbers = document.querySelectorAll('.stat-number');
+    if (statNumbers.length >= 3) {
+        // Set satisfaction rate immediately, no animation
+        statNumbers[2].textContent = '100%';  // Satisfaction rate
+    }
+    
+    // Additional fallback after a short delay
     setTimeout(() => {
         const statNumbers = document.querySelectorAll('.stat-number');
         if (statNumbers.length >= 3) {
@@ -255,5 +266,5 @@ document.addEventListener('DOMContentLoaded', function() {
             statNumbers[1].textContent = '10+';   // Years experience  
             statNumbers[2].textContent = '100%';  // Satisfaction rate
         }
-    }, 5000); // After 5 seconds, ensure correct values are shown
+    }, 3000); // After 3 seconds, ensure all correct values are shown
 }); 
