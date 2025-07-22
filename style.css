@@ -451,10 +451,70 @@ body {
     color: #fff;
 }
 
+/* Warranty Section */
+.warranty {
+    padding: 60px 0;
+    background: #fff;
+}
+
+.warranty-card {
+    max-width: 800px;
+    margin: 0 auto;
+    background: linear-gradient(135deg, #DC143C, #8B0000);
+    color: #fff;
+    padding: 3rem;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    gap: 3rem;
+    box-shadow: 0 20px 60px rgba(220, 20, 60, 0.3);
+}
+
+.warranty-icon {
+    text-align: center;
+    opacity: 0.9;
+}
+
+.warranty-content h3 {
+    font-family: 'Crimson Text', serif;
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    color: #fff;
+}
+
+.warranty-content p {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    margin-bottom: 2rem;
+    opacity: 0.9;
+}
+
+.warranty-features {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.warranty-feature {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.warranty-feature i {
+    color: #fff;
+    font-size: 1.2rem;
+}
+
+.warranty-feature span {
+    font-size: 1.1rem;
+    font-weight: 500;
+}
+
 /* Contact Section */
 .contact {
     padding: 60px 0;
-    background: #fff;
+    background: #f8f9fa;
 }
 
 .contact-content {
@@ -740,5 +800,13 @@ body {
     .contact-buttons .btn {
         width: 100%;
         max-width: 200px;
+    }
+    
+    .warranty-card {
+        flex-direction: column;
+        text-align: center;
+        gap: 2rem;
+        padding: 2rem;
+        margin: 0 20px;
     }
 } 

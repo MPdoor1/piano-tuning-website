@@ -208,11 +208,22 @@ const statsObserver = new IntersectionObserver((entries) => {
             const suffixes = ['+', '+', '%'];
             
             statNumbers.forEach((stat, index) => {
-                animateCountUp(stat, values[index]);
-                // Add suffix after animation
-                setTimeout(() => {
-                    stat.textContent = values[index] + suffixes[index];
-                }, 2000);
+                // Set initial value for animation
+                let currentValue = 0;
+                const targetValue = values[index];
+                const suffix = suffixes[index];
+                const increment = targetValue / 100; // Animate over 100 steps
+                
+                const timer = setInterval(() => {
+                    currentValue += increment;
+                    if (currentValue >= targetValue) {
+                        currentValue = targetValue;
+                        stat.textContent = Math.floor(currentValue) + suffix;
+                        clearInterval(timer);
+                    } else {
+                        stat.textContent = Math.floor(currentValue) + (index === 2 ? '%' : (index > 0 ? '+' : ''));
+                    }
+                }, 20);
             });
             
             statsObserver.unobserve(entry.target);
